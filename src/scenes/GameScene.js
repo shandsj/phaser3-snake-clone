@@ -29,6 +29,7 @@ export default class GameScene extends Phaser.Scene {
   create() {
     this.player = new Player(this, new Inputs(this));
     this.player.died.addListener(null, this.initializeNewGame, this);
+    this.player.create();
 
     this.initializeNewGame();
   }

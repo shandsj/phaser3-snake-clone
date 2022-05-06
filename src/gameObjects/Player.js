@@ -3,6 +3,17 @@ import PlayerDirection from './PlayerDirection';
 
 const PLAYER_SPRITE_WIDTH = 16;
 const PLAYER_SPRITE_HEIGHT = 16;
+const MOVEMENT_TIMER_INTERVAL = 100;
+
+/**
+ * The default starting x-axis position for the player, in grid units.
+ */
+const DEFAULT_PLAYER_GRID_X_POSITION = 25;
+
+/**
+ * The default starting y-axis position for the player, in grid units.
+ */
+const DEFAULT_PLAYER_GRID_Y_POSITION = 18;
 
 /**
  * The game object for the player.
@@ -29,25 +40,24 @@ export default class Player {
   }
 
   /**
+   * Creates the player game object.
+   */
+  create() {
+    this.timer = this.scene.time.addEvent({
+      delay: MOVEMENT_TIMER_INTERVAL,
+      callback: this.movePlayerTimerCallback,
+      callbackScope: this,
+      loop: true,
+    });
+  }
+
+  /**
    * Updates the player game object.
    * @param {*} time The game time.
    * @param {*} delta The delta time since update was last called.
    */
   update(time, delta) {
     this.handleMovementInputs();
-
-    this.timer += delta;
-    if (this.timer > 100) {
-      const nextHeadSpritePosition = this.calculateNextHeadSpritePosition();
-      const nextHeadSprite = this.scene.add.sprite(
-          nextHeadSpritePosition.x,
-          nextHeadSpritePosition.y,
-          'snake');
-
-      nextHeadSprite.angle = this.calculateNextHeadSpriteAngle();
-      this.playerSprites.push(nextHeadSprite);
-      this.timer = 0;
-    }
 
     while (this.playerSprites.length > this.playerLength) {
       const removedPlayerSprite = this.playerSprites.shift();
@@ -75,6 +85,17 @@ export default class Player {
    */
   get headSprite() {
     return this.playerSprites[this.playerSprites.length - 1];
+  }
+
+  /**
+   * The callback function used for the movement timer.
+   */
+  movePlayerTimerCallback() {
+    const nextHeadSpritePosition = this.calculateNextHeadSpritePosition();
+    const nextHeadSprite = this.scene.add.sprite(nextHeadSpritePosition.x, nextHeadSpritePosition.y, 'snake');
+
+    nextHeadSprite.angle = this.calculateNextHeadSpriteAngle();
+    this.playerSprites.push(nextHeadSprite);
   }
 
   /**
@@ -152,11 +173,13 @@ export default class Player {
   initializeForNewGame() {
     this.playerLength = 1;
     this.timer = 0;
-    this.playerYDirection = -16;
-    this.playerXDirection = 0;
+    this.playerDirection = PlayerDirection.up;
 
-    const playerSprite = this.scene.add.sprite(25 * 16, 18 * 16, 'snake');
-    this.playerSprites.push(playerSprite);
+    const newHeadSprite = this.scene.add.sprite(
+        DEFAULT_PLAYER_GRID_X_POSITION * PLAYER_SPRITE_WIDTH,
+        DEFAULT_PLAYER_GRID_Y_POSITION * PLAYER_SPRITE_HEIGHT,
+        'snake');
+    this.playerSprites.push(newHeadSprite);
   }
 
   /**
