@@ -1,4 +1,8 @@
 import Phaser from 'phaser';
+import PlayerDirection from './PlayerDirection';
+
+const PLAYER_SPRITE_WIDTH = 16;
+const PLAYER_SPRITE_HEIGHT = 16;
 
 /**
  * The game object for the player.
@@ -13,22 +17,15 @@ export default class Player {
     this.scene = scene;
     this.inputs = inputs;
 
+    this.playerDirection = PlayerDirection.up;
+
     this.playerSprites = [];
     this.playerLength = 1;
-    this.playerYDirection = -16;
-    this.playerXDirection = 0;
     this.keys = undefined;
     this.cursors = undefined;
     this.timer = 0;
 
     this.died = new Phaser.Events.EventEmitter();
-  }
-
-  /**
-   * Creates the player game object.
-   */
-  create() {
-
   }
 
   /**
@@ -41,14 +38,14 @@ export default class Player {
 
     this.timer += delta;
     if (this.timer > 100) {
-      const playerHead = this.playerSprites[this.playerSprites.length - 1];
-      const newPlayerSprite = this.scene.add.sprite(
-          playerHead.x + this.playerXDirection,
-          playerHead.y + this.playerYDirection,
+      const nextHeadSpritePosition = this.calculateNextHeadSpritePosition();
+      const nextHeadSprite = this.scene.add.sprite(
+          nextHeadSpritePosition.x,
+          nextHeadSpritePosition.y,
           'snake');
 
-      newPlayerSprite.angle = this.playerYDirection == 0 ? 90 : 0;
-      this.playerSprites.push(newPlayerSprite);
+      nextHeadSprite.angle = this.calculateNextHeadSpriteAngle();
+      this.playerSprites.push(nextHeadSprite);
       this.timer = 0;
     }
 
@@ -58,28 +55,53 @@ export default class Player {
     }
 
     // Check if the player has collided with a wall
-    const playerHead = this.playerSprites[this.playerSprites.length - 1];
-    if (playerHead.x <= 0 ||
-        playerHead.x >= 50 * 16 ||
-        playerHead.y <= 0 ||
-        playerHead.y >= 37 * 16) {
+    if (this.headSprite.getCenter().x <= 0 ||
+      this.headSprite.getCenter().x >= 50 * 16 ||
+      this.headSprite.getCenter().y <= 0 ||
+      this.headSprite.getCenter().y >= 37 * 16) {
       this.died.emit(null);
     }
 
     // Check if player has collided with the rest of the player's body
     for (let i = 0; i < this.playerSprites.length - 3; i++) {
-      if (playerHead.getCenter().equals(this.playerSprites[i].getCenter())) {
+      if (this.headSprite.getCenter().equals(this.playerSprites[i].getCenter())) {
         this.died.emit(null);
       }
     }
   }
 
   /**
-   * Gets the player's head center location.
-   * @return {any} The player head center.
+   * Gets the player's head sprite.
    */
-  getHeadCenter() {
-    return this.playerSprites[this.playerSprites.length - 1].getCenter();
+  get headSprite() {
+    return this.playerSprites[this.playerSprites.length - 1];
+  }
+
+  /**
+   * Calculates the next head sprite position.
+   * @return {any} The calculated next head sprite position.
+   */
+  calculateNextHeadSpritePosition() {
+    return {
+      x: this.headSprite.getCenter().x + this.xAxisMovementDelta,
+      y: this.headSprite.getCenter().y + this.yAxisMovementDelta,
+    };
+  }
+
+  /**
+   * Calculates the next head sprite angle, in degrees.
+   * @return {int} The calculated next head sprite angle, in degrees.
+   */
+  calculateNextHeadSpriteAngle() {
+    switch (this.playerDirection) {
+      case PlayerDirection.up:
+      case PlayerDirection.down:
+        return 0;
+
+      case PlayerDirection.right:
+      case PlayerDirection.left:
+        return 90;
+    }
   }
 
   /**
@@ -88,36 +110,32 @@ export default class Player {
   handleMovementInputs() {
     if (this.inputs.isUpMovementInputDown()) {
       // Prevent the player from going in the reverse direction
-      if (this.playerYDirection == 16) {
+      if (this.playerDirection == PlayerDirection.down) {
         return;
       }
 
-      this.playerYDirection = -16;
-      this.playerXDirection = 0;
+      this.playerDirection = PlayerDirection.up;
     } else if (this.inputs.isLeftMovementInputDown()) {
       // Prevent the player from going in the reverse direction
-      if (this.playerXDirection == 16) {
+      if (this.playerDirection == PlayerDirection.right) {
         return;
       }
 
-      this.playerYDirection = 0;
-      this.playerXDirection = -16;
+      this.playerDirection = PlayerDirection.left;
     } else if (this.inputs.isDownMovementInputDown()) {
       // Prevent the player from going in the reverse direction
-      if (this.playerYDirection == -16) {
+      if (this.playerDirection == PlayerDirection.up) {
         return;
       }
 
-      this.playerYDirection = 16;
-      this.playerXDirection = 0;
+      this.playerDirection = PlayerDirection.down;
     } else if (this.inputs.isRightMovementInputDown()) {
       // Prevent the player from going in the reverse direction
-      if (this.playerXDirection == -16) {
+      if (this.playerDirection == PlayerDirection.left) {
         return;
       }
 
-      this.playerYDirection = 0;
-      this.playerXDirection = 16;
+      this.playerDirection = PlayerDirection.right;
     }
   }
 
@@ -139,5 +157,41 @@ export default class Player {
 
     const playerSprite = this.scene.add.sprite(25 * 16, 18 * 16, 'snake');
     this.playerSprites.push(playerSprite);
+  }
+
+  /**
+   * Gets the amount of pixels the player needs to move on the x-axis.
+   * @return {int} The amount of pixels to move on the x-axis
+   */
+  get xAxisMovementDelta() {
+    switch (this.playerDirection) {
+      case PlayerDirection.up:
+      case PlayerDirection.down:
+        return 0;
+
+      case PlayerDirection.left:
+        return -PLAYER_SPRITE_WIDTH;
+
+      case PlayerDirection.right:
+        return PLAYER_SPRITE_WIDTH;
+    }
+  }
+
+  /**
+   * Gets the amount of pixels the player needs to move on the y-axis.
+   * @return {int} The amount of pixels to move on the y-axis
+   */
+  get yAxisMovementDelta() {
+    switch (this.playerDirection) {
+      case PlayerDirection.left:
+      case PlayerDirection.right:
+        return 0;
+
+      case PlayerDirection.up:
+        return -PLAYER_SPRITE_HEIGHT;
+
+      case PlayerDirection.down:
+        return PLAYER_SPRITE_HEIGHT;
+    }
   }
 }

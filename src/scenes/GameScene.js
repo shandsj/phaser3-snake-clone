@@ -29,7 +29,7 @@ export default class GameScene extends Phaser.Scene {
   create() {
     this.player = new Player(this, new Inputs(this));
     this.player.died.addListener(null, this.initializeNewGame, this);
-    this.player.create();
+
     this.initializeNewGame();
   }
 
@@ -42,7 +42,7 @@ export default class GameScene extends Phaser.Scene {
     this.player.update(time, delta);
 
     // Check if a player has collided with food
-    if (this.player.getHeadCenter().equals(this.foodSprite.getCenter())) {
+    if (this.player.headSprite.getCenter().equals(this.foodSprite.getCenter())) {
       this.eatFood();
     }
   }
