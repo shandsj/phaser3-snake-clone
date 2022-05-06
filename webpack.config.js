@@ -13,6 +13,8 @@ module.exports = {
         filename: 'project.bundle.js'
     },
 
+    mode: "development",
+
     module: {
         rules: [
           {
@@ -31,6 +33,8 @@ module.exports = {
           }
         ]
     },
+
+    devtool: 'inline-source-map',
 
     plugins: [
         new webpack.DefinePlugin({
