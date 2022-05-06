@@ -3,14 +3,15 @@ import Phaser from 'phaser';
 /**
  * The game object for the player.
  */
-export default class Player extends Phaser.GameObjects.GameObject {
-
+export default class Player {
   /**
    * Initializes a new instance of the Player class.
-   * @param {*} scene The scene.
+   * @param {Scene} scene The scene object.
+   * @param {Inputs} inputs The inputs object.
    */
-  constructor(scene) {
-    super(scene);
+  constructor(scene, inputs) {
+    this.scene = scene;
+    this.inputs = inputs;
 
     this.playerSprites = [];
     this.playerLength = 1;
@@ -18,7 +19,7 @@ export default class Player extends Phaser.GameObjects.GameObject {
     this.playerXDirection = 0;
     this.keys = undefined;
     this.cursors = undefined;
-    this.timer = 0;    
+    this.timer = 0;
 
     this.died = new Phaser.Events.EventEmitter();
   }
@@ -27,12 +28,7 @@ export default class Player extends Phaser.GameObjects.GameObject {
    * Creates the player game object.
    */
   create() {
-    this.keys = this.scene.input.keyboard.addKeys({
-      w: Phaser.Input.Keyboard.KeyCodes.W,
-      s: Phaser.Input.Keyboard.KeyCodes.S,
-      a: Phaser.Input.Keyboard.KeyCodes.A,
-      d: Phaser.Input.Keyboard.KeyCodes.D,
-    });
+
   }
 
   /**
@@ -41,7 +37,7 @@ export default class Player extends Phaser.GameObjects.GameObject {
    * @param {*} delta The delta time since update was last called.
    */
   update(time, delta) {
-    this.handleKeyboardInput();
+    this.handleMovementInputs();
 
     this.timer += delta;
     if (this.timer > 100) {
@@ -80,17 +76,17 @@ export default class Player extends Phaser.GameObjects.GameObject {
 
   /**
    * Gets the player's head center location.
-   * @returns The player head center.
+   * @return {any} The player head center.
    */
   getHeadCenter() {
     return this.playerSprites[this.playerSprites.length - 1].getCenter();
   }
 
   /**
-   * Handles the keyboard input.
+   * Handles the movement inputs.
    */
-  handleKeyboardInput() {
-    if (this.keys.w.isDown) {
+  handleMovementInputs() {
+    if (this.inputs.isUpMovementInputDown()) {
       // Prevent the player from going in the reverse direction
       if (this.playerYDirection == 16) {
         return;
@@ -98,7 +94,7 @@ export default class Player extends Phaser.GameObjects.GameObject {
 
       this.playerYDirection = -16;
       this.playerXDirection = 0;
-    } else if (this.keys.a.isDown) {
+    } else if (this.inputs.isLeftMovementInputDown()) {
       // Prevent the player from going in the reverse direction
       if (this.playerXDirection == 16) {
         return;
@@ -106,7 +102,7 @@ export default class Player extends Phaser.GameObjects.GameObject {
 
       this.playerYDirection = 0;
       this.playerXDirection = -16;
-    } else if (this.keys.s.isDown) {
+    } else if (this.inputs.isDownMovementInputDown()) {
       // Prevent the player from going in the reverse direction
       if (this.playerYDirection == -16) {
         return;
@@ -114,7 +110,7 @@ export default class Player extends Phaser.GameObjects.GameObject {
 
       this.playerYDirection = 16;
       this.playerXDirection = 0;
-    } else if (this.keys.d.isDown) {
+    } else if (this.inputs.isRightMovementInputDown()) {
       // Prevent the player from going in the reverse direction
       if (this.playerXDirection == -16) {
         return;

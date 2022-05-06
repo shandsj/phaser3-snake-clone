@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import Inputs from '../gameObjects/Inputs';
 import Player from '../gameObjects/Player';
 
 /**
@@ -11,7 +12,7 @@ export default class GameScene extends Phaser.Scene {
   constructor() {
     super('game-scene');
 
-    this.foodSprite = undefined;    
+    this.foodSprite = undefined;
   }
 
   /**
@@ -26,10 +27,9 @@ export default class GameScene extends Phaser.Scene {
    * Creates the scene.
    */
   create() {
-    this.player = this.add.existing(new Player(this));
+    this.player = new Player(this, new Inputs(this));
     this.player.died.addListener(null, this.initializeNewGame, this);
     this.player.create();
-
     this.initializeNewGame();
   }
 
