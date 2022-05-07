@@ -248,7 +248,7 @@ export default class Player {
    * Initializes a new game.
    */
   initializeForNewGame() {
-    this.playerLength = 8;
+    this.playerLength = 2;
     this.playerDirection = PlayerDirection.up;
 
     this.playerSprites.push(this.scene.add.sprite(
