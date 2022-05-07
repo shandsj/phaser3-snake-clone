@@ -45,42 +45,42 @@ export default class Player {
   create() {
     this.scene.anims.create({
       key: 'body1',
-      frames: this.scene.anims.generateFrameNumbers('snake', { frames: [1] }),
+      frames: [{ key: 'snake', frame: 1 }],
       framerate: 8,
       repeat: 1,
     });
 
     this.scene.anims.create({
       key: 'body2',
-      frames: this.scene.anims.generateFrameNumbers('snake', { frames: [2] }),
+      frames: [{ key: 'snake', frame: 2 }],
       framerate: 8,
       repeat: 1,
     });
 
     this.scene.anims.create({
       key: 'tail',
-      frames: this.scene.anims.generateFrameNumbers('snake', { frames: [0] }),
+      frames: [{ key: 'snake', frame: 0 }],
       framerate: 8,
       repeat: 1,
     });
 
     this.scene.anims.create({
       key: 'head',
-      frames: this.scene.anims.generateFrameNumbers('snake', { frames: [3] }),
+      frames: [{ key: 'snake', frame: 3 }],
       framerate: 8,
       repeat: 1,
     });
 
     this.scene.anims.create({
       key: 'turn1',
-      frames: this.scene.anims.generateFrameNumbers('snake', { frames: [4] }),
+      frames: [{ key: 'snake', frame: 4 }],
       framerate: 8,
       repeat: 1,
     });
 
     this.scene.anims.create({
       key: 'turn2',
-      frames: this.scene.anims.generateFrameNumbers('snake', { frames: [5] }),
+      frames: [{ key: 'snake', frame: 5 }],
       framerate: 8,
       repeat: 1,
     });

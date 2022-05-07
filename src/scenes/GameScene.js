@@ -19,7 +19,7 @@ export default class GameScene extends Phaser.Scene {
    * Preloads the scene.
    */
   preload() {
-    this.load.image('food', 'assets/food.png');
+    this.load.spritesheet('food', 'assets/food.png', { frameWidth: 16, frameHeight: 16 });
     this.load.spritesheet('snake', 'assets/snake.png', { frameWidth: 16, frameHeight: 16 });
   }
 
@@ -30,6 +30,21 @@ export default class GameScene extends Phaser.Scene {
     this.player = new Player(this, new Inputs(this));
     this.player.died.addListener(null, this.initializeNewGame, this);
     this.player.create();
+
+    this.anims.create({
+      key: 'idle',
+      frames: [
+        { key: 'food', frame: 0, duration: 1000 },
+        { key: 'food', frame: 1, duration: 500 },
+        { key: 'food', frame: 2, duration: 3000 },
+        { key: 'food', frame: 3, duration: 100 },
+        { key: 'food', frame: 4, duration: 100 },
+        { key: 'food', frame: 5, duration: 1000 },
+        { key: 'food', frame: 6, duration: 250 },
+      ],
+      framerate: 8,
+      repeat: 1,
+    });
 
     this.initializeNewGame();
   }
@@ -61,8 +76,8 @@ export default class GameScene extends Phaser.Scene {
     const MAXIMUM_FOOD_Y = 36;
     this.foodSprite = this.add.sprite(
         Phaser.Math.Between(MINIMUM_FOOD_X, MAXIMUM_FOOD_X) * 16,
-        Phaser.Math.Between(MINIMUM_FOOD_Y, MAXIMUM_FOOD_Y) * 16,
-        'food');
+        Phaser.Math.Between(MINIMUM_FOOD_Y, MAXIMUM_FOOD_Y) * 16);
+    this.foodSprite.play('idle');
   }
 
   /**
@@ -77,7 +92,7 @@ export default class GameScene extends Phaser.Scene {
 
     this.foodSprite = this.add.sprite(
         Phaser.Math.Between(0, 50) * 16,
-        Phaser.Math.Between(0, 37) * 16,
-        'food');
+        Phaser.Math.Between(0, 37) * 16);
+    this.foodSprite.play('idle');
   }
 }
