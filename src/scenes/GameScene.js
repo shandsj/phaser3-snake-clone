@@ -20,7 +20,7 @@ export default class GameScene extends Phaser.Scene {
    */
   preload() {
     this.load.image('food', 'assets/food.png');
-    this.load.image('snake', 'assets/Snake_body.png');
+    this.load.spritesheet('snake', 'assets/snake.png', { frameWidth: 16, frameHeight: 16 });
   }
 
   /**

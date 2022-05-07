@@ -43,6 +43,50 @@ export default class Player {
    * Creates the player game object.
    */
   create() {
+    this.scene.anims.create({
+      key: 'body1',
+      frames: this.scene.anims.generateFrameNumbers('snake', { frames: [1] }),
+      framerate: 8,
+      repeat: 1,
+    });
+
+    this.scene.anims.create({
+      key: 'body2',
+      frames: this.scene.anims.generateFrameNumbers('snake', { frames: [2] }),
+      framerate: 8,
+      repeat: 1,
+    });
+
+    this.scene.anims.create({
+      key: 'tail',
+      frames: this.scene.anims.generateFrameNumbers('snake', { frames: [0] }),
+      framerate: 8,
+      repeat: 1,
+    });
+
+    this.scene.anims.create({
+      key: 'head',
+      frames: this.scene.anims.generateFrameNumbers('snake', { frames: [3] }),
+      framerate: 8,
+      repeat: 1,
+    });
+
+    this.scene.anims.create({
+      key: 'turn1',
+      frames: this.scene.anims.generateFrameNumbers('snake', { frames: [4] }),
+      framerate: 8,
+      repeat: 1,
+    });
+
+    this.scene.anims.create({
+      key: 'turn2',
+      frames: this.scene.anims.generateFrameNumbers('snake', { frames: [5] }),
+      framerate: 8,
+      repeat: 1,
+    });
+
+    this.initializeForNewGame();
+    
     this.timer = this.scene.time.addEvent({
       delay: MOVEMENT_TIMER_INTERVAL,
       callback: this.movePlayerTimerCallback,
@@ -58,11 +102,6 @@ export default class Player {
    */
   update(time, delta) {
     this.handleMovementInputs();
-
-    while (this.playerSprites.length > this.playerLength) {
-      const removedPlayerSprite = this.playerSprites.shift();
-      removedPlayerSprite.destroy();
-    }
 
     // Check if the player has collided with a wall
     if (this.headSprite.getCenter().x <= 0 ||
@@ -87,15 +126,52 @@ export default class Player {
     return this.playerSprites[this.playerSprites.length - 1];
   }
 
+  get tailSprite() {
+    return this.playerSprites[0];
+  }
+
   /**
    * The callback function used for the movement timer.
    */
   movePlayerTimerCallback() {
     const nextHeadSpritePosition = this.calculateNextHeadSpritePosition();
-    const nextHeadSprite = this.scene.add.sprite(nextHeadSpritePosition.x, nextHeadSpritePosition.y, 'snake');
+    const nextHeadSprite = this.scene.add.sprite(nextHeadSpritePosition.x, nextHeadSpritePosition.y);
 
     nextHeadSprite.angle = this.calculateNextHeadSpriteAngle();
     this.playerSprites.push(nextHeadSprite);
+
+    while (this.playerSprites.length > this.playerLength) {
+      const removedPlayerSprite = this.playerSprites.shift();
+      removedPlayerSprite.destroy();
+    }
+
+    this.tailSprite.angle = this.playerSprites[1].angle;
+    this.tailSprite.play('tail');
+    this.headSprite.play('head');
+
+    // If the player is longer than 2 units, then replace
+    // the last head with a body, or a turn.
+    if (this.playerLength > 2) {
+
+      // If the player is longer than 2 units, then replace
+      // the last head with a body, or a turn.
+      let previousHeadSprite = this.playerSprites[this.playerSprites.length - 2];
+      if (previousHeadSprite.angle == this.headSprite.angle) {
+        previousHeadSprite.play('body' + Phaser.Math.Between(1, 2));
+      } else if (
+        (this.headSprite.angle == 90 && previousHeadSprite.angle == 0) ||
+        (this.headSprite.angle == -180 && previousHeadSprite.angle == 90) ||
+        (this.headSprite.angle == -90 && previousHeadSprite.angle == -180) ||
+        (this.headSprite.angle == 0 && previousHeadSprite.angle == -90)) {
+        previousHeadSprite.play('turn1');
+      } else if (
+        (this.headSprite.angle == 0 && previousHeadSprite.angle == 90) ||
+        (this.headSprite.angle == 90 && previousHeadSprite.angle == -180) ||
+        (this.headSprite.angle == -180 && previousHeadSprite.angle == -90) ||
+        (this.headSprite.angle == -90 && previousHeadSprite.angle == 0)) {
+        previousHeadSprite.play('turn2');
+      }
+    }
   }
 
   /**
@@ -116,12 +192,13 @@ export default class Player {
   calculateNextHeadSpriteAngle() {
     switch (this.playerDirection) {
       case PlayerDirection.up:
+        return -90;
       case PlayerDirection.down:
-        return 0;
-
-      case PlayerDirection.right:
-      case PlayerDirection.left:
         return 90;
+      case PlayerDirection.right:
+        return 0;
+      case PlayerDirection.left:
+        return -180;
     }
   }
 
@@ -171,15 +248,12 @@ export default class Player {
    * Initializes a new game.
    */
   initializeForNewGame() {
-    this.playerLength = 1;
-    this.timer = 0;
+    this.playerLength = 8;
     this.playerDirection = PlayerDirection.up;
 
-    const newHeadSprite = this.scene.add.sprite(
-        DEFAULT_PLAYER_GRID_X_POSITION * PLAYER_SPRITE_WIDTH,
-        DEFAULT_PLAYER_GRID_Y_POSITION * PLAYER_SPRITE_HEIGHT,
-        'snake');
-    this.playerSprites.push(newHeadSprite);
+    this.playerSprites.push(this.scene.add.sprite(
+      DEFAULT_PLAYER_GRID_X_POSITION * PLAYER_SPRITE_WIDTH,
+      DEFAULT_PLAYER_GRID_Y_POSITION * PLAYER_SPRITE_HEIGHT));
   }
 
   /**
