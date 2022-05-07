@@ -3,8 +3,12 @@ import GameScene from './scenes/GameScene';
 
 const config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 592,
+  width: 320,
+  height: 240,
+  scale: {
+    mode: Phaser.Scale.FIT,
+    zoom: 1,
+  },
   backgroundColor: '#88cc88',
   pixelArt: true,
   antialias: false,

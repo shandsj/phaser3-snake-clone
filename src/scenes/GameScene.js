@@ -1,6 +1,10 @@
 import Phaser from 'phaser';
 import Inputs from '../gameObjects/Inputs';
 import Player from '../gameObjects/Player';
+import Grid from '../util/Grid';
+
+const GAME_WIDTH = 320;
+const GAME_HEIGHT = 240;
 
 /**
  * The main game scene.
@@ -12,6 +16,7 @@ export default class GameScene extends Phaser.Scene {
   constructor() {
     super('game-scene');
 
+    this.grid = new Grid(this, GAME_WIDTH, GAME_HEIGHT);
     this.foodSprite = undefined;
   }
 
@@ -19,8 +24,8 @@ export default class GameScene extends Phaser.Scene {
    * Preloads the scene.
    */
   preload() {
-    this.load.spritesheet('food', 'assets/food.png', { frameWidth: 16, frameHeight: 16 });
-    this.load.spritesheet('snake', 'assets/snake.png', { frameWidth: 16, frameHeight: 16 });
+    this.load.spritesheet('food', 'assets/food.png', {frameWidth: 16, frameHeight: 16});
+    this.load.spritesheet('snake', 'assets/snake.png', {frameWidth: 16, frameHeight: 16});
   }
 
   /**
@@ -34,16 +39,16 @@ export default class GameScene extends Phaser.Scene {
     this.anims.create({
       key: 'idle',
       frames: [
-        { key: 'food', frame: 0, duration: 1000 },
-        { key: 'food', frame: 1, duration: 500 },
-        { key: 'food', frame: 2, duration: 3000 },
-        { key: 'food', frame: 3, duration: 100 },
-        { key: 'food', frame: 4, duration: 100 },
-        { key: 'food', frame: 5, duration: 1000 },
-        { key: 'food', frame: 6, duration: 250 },
+        {key: 'food', frame: 0, duration: 500},
+        {key: 'food', frame: 1, duration: 200},
+        {key: 'food', frame: 2, duration: 500},
+        {key: 'food', frame: 3, duration: 100},
+        {key: 'food', frame: 4, duration: 100},
+        {key: 'food', frame: 5, duration: 500},
+        {key: 'food', frame: 6, duration: 250},
       ],
       framerate: 8,
-      repeat: 1,
+      repeat: -1,
     });
 
     this.initializeNewGame();
@@ -69,15 +74,7 @@ export default class GameScene extends Phaser.Scene {
   eatFood() {
     this.foodSprite.destroy();
     this.player.eatFood();
-
-    const MINIMUM_FOOD_X = 1;
-    const MAXIMUM_FOOD_X = 49;
-    const MINIMUM_FOOD_Y = 1;
-    const MAXIMUM_FOOD_Y = 36;
-    this.foodSprite = this.add.sprite(
-        Phaser.Math.Between(MINIMUM_FOOD_X, MAXIMUM_FOOD_X) * 16,
-        Phaser.Math.Between(MINIMUM_FOOD_Y, MAXIMUM_FOOD_Y) * 16);
-    this.foodSprite.play('idle');
+    this.spawnFood();
   }
 
   /**
@@ -90,9 +87,37 @@ export default class GameScene extends Phaser.Scene {
       this.foodSprite.destroy();
     }
 
-    this.foodSprite = this.add.sprite(
-        Phaser.Math.Between(0, 50) * 16,
-        Phaser.Math.Between(0, 37) * 16);
+    this.spawnFood();
+  }
+
+  /**
+   * Gets the game width, in pixels.
+   */
+  get gameWidth() {
+    return GAME_WIDTH;
+  }
+
+  /**
+   * Gets the game height, in pixels.
+   */
+  get gameHeight() {
+    return GAME_HEIGHT;
+  }
+
+  /**
+   * Spawns a food game object.
+   */
+  spawnFood() {
+    const MINIMUM_FOOD_X = 1;
+    const MAXIMUM_FOOD_X = this.grid.gridWidth - 1;
+    const MINIMUM_FOOD_Y = 1;
+    const MAXIMUM_FOOD_Y = this.grid.gridHeight - 1;
+
+    const location = this.grid.getGameLocation(
+        Phaser.Math.Between(MINIMUM_FOOD_X, MAXIMUM_FOOD_X),
+        Phaser.Math.Between(MINIMUM_FOOD_Y, MAXIMUM_FOOD_Y));
+
+    this.foodSprite = this.add.sprite(location.x, location.y);
     this.foodSprite.play('idle');
   }
 }
