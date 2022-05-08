@@ -24,14 +24,14 @@ export default class Grid {
    * Gets the grid width, in cells.
    */
   get gridWidth() {
-    return this.scene.gameWidth / this.cellSize;
+    return Math.floor(this.scene.game.config.width / this.cellSize);
   }
 
   /**
    * Gets the grid height, in cells.
    */
   get gridHeight() {
-    return this.scene.gameHeight / this.cellSize;
+    return Math.floor(this.scene.game.config.height / this.cellSize);
   }
 
   /**
@@ -65,8 +65,8 @@ export default class Grid {
    */
   isOutsideGrid(gameX, gameY) {
     return gameX <= 0 ||
-      gameX >= this.scene.gameWidth ||
+      gameX >= this.scene.game.config.width ||
       gameY <= 0 ||
-      gameY >= this.scene.gameHeight;
+      gameY >= this.scene.game.config.height;
   }
 }

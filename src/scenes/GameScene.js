@@ -3,9 +3,6 @@ import Inputs from '../gameObjects/Inputs';
 import Player from '../gameObjects/Player';
 import Grid from '../util/Grid';
 
-const GAME_WIDTH = 320;
-const GAME_HEIGHT = 240;
-
 /**
  * The main game scene.
  */
@@ -16,7 +13,7 @@ export default class GameScene extends Phaser.Scene {
   constructor() {
     super('game-scene');
 
-    this.grid = new Grid(this, GAME_WIDTH, GAME_HEIGHT);
+    this.grid = new Grid(this);
     this.foodSprite = undefined;
   }
 
@@ -88,20 +85,6 @@ export default class GameScene extends Phaser.Scene {
     }
 
     this.spawnFood();
-  }
-
-  /**
-   * Gets the game width, in pixels.
-   */
-  get gameWidth() {
-    return GAME_WIDTH;
-  }
-
-  /**
-   * Gets the game height, in pixels.
-   */
-  get gameHeight() {
-    return GAME_HEIGHT;
   }
 
   /**
