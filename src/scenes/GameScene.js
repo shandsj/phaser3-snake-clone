@@ -15,6 +15,8 @@ export default class GameScene extends Phaser.Scene {
 
     this.grid = new Grid(this);
     this.foodSprite = undefined;
+    this.player = undefined;
+    this.inputs = undefined;
   }
 
   /**
@@ -23,13 +25,17 @@ export default class GameScene extends Phaser.Scene {
   preload() {
     this.load.spritesheet('food', 'assets/food.png', {frameWidth: 16, frameHeight: 16});
     this.load.spritesheet('snake', 'assets/snake.png', {frameWidth: 16, frameHeight: 16});
+    this.load.image('arrow', 'assets/arrow.png');
   }
 
   /**
    * Creates the scene.
    */
   create() {
-    this.player = new Player(this, new Inputs(this));
+    this.inputs = new Inputs(this);
+    this.inputs.create();
+
+    this.player = new Player(this, this.inputs);
     this.player.died.addListener(null, this.initializeNewGame, this);
     this.player.create();
 
