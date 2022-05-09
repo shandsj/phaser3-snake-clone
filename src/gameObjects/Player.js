@@ -1,10 +1,9 @@
 import Phaser from 'phaser';
-import GenerateFrameNumberConfigFactory from '../scenes/GenerateFrameNumberConfigFactory';
 import PlayerDirection from './PlayerDirection';
 
 const PLAYER_SPRITE_WIDTH = 16;
 const PLAYER_SPRITE_HEIGHT = 16;
-const MOVEMENT_TIMER_INTERVAL = 300;
+const MOVEMENT_TIMER_INTERVAL = 200;
 
 /**
  * The game object for the player.
@@ -36,42 +35,42 @@ export default class Player {
   create() {
     this.scene.anims.create({
       key: 'body1',
-      frames: this.scene.anims.generateFrameNumbers('snake', GenerateFrameNumberConfigFactory.createGenerateFrameNumberConfig(1, 7, 2)),
-      duration: MOVEMENT_TIMER_INTERVAL,
-      repeat: -1,
+      frames: [{key: 'snake', frame: 1}],
+      framerate: 8,
+      repeat: 1,
     });
 
     this.scene.anims.create({
       key: 'body2',
-      frames: this.scene.anims.generateFrameNumbers('snake', GenerateFrameNumberConfigFactory.createGenerateFrameNumberConfig(2, 7, 2)),
-      duration: MOVEMENT_TIMER_INTERVAL,
-      repeat: -1,
+      frames: [{key: 'snake', frame: 2}],
+      framerate: 8,
+      repeat: 1,
     });
 
     this.scene.anims.create({
       key: 'tail',
-      frames: this.scene.anims.generateFrameNumbers('snake', GenerateFrameNumberConfigFactory.createGenerateFrameNumberConfig(0, 7, 2)),
-      duration: MOVEMENT_TIMER_INTERVAL,
-      repeat: 0,
+      frames: [{key: 'snake', frame: 0}],
+      framerate: 8,
+      repeat: 1,
     });
 
     this.scene.anims.create({
       key: 'head',
-      frames: this.scene.anims.generateFrameNumbers('snake', GenerateFrameNumberConfigFactory.createGenerateFrameNumberConfig(3, 7, 2)),
-      duration: MOVEMENT_TIMER_INTERVAL,
-      repeat: -1,
+      frames: [{key: 'snake', frame: 3}],
+      framerate: 8,
+      repeat: 1,
     });
 
     this.scene.anims.create({
       key: 'turn1',
-      frames: [{key: 'snake', frame: 5}],
+      frames: [{key: 'snake', frame: 4}],
       framerate: 8,
       repeat: 1,
     });
 
     this.scene.anims.create({
       key: 'turn2',
-      frames: [{key: 'snake', frame: 6}],
+      frames: [{key: 'snake', frame: 5}],
       framerate: 8,
       repeat: 1,
     });
@@ -124,29 +123,20 @@ export default class Player {
   /**
    * The callback function used for the movement timer.
    */
-  movePlayerTimerCallback() {    
+  movePlayerTimerCallback() {
     const nextHeadSpritePosition = this.calculateNextHeadSpritePosition();
     const nextHeadSprite = this.scene.add.sprite(nextHeadSpritePosition.x, nextHeadSpritePosition.y);
-    nextHeadSprite.angle = this.calculateNextHeadSpriteAngle();    
+
+    nextHeadSprite.angle = this.calculateNextHeadSpriteAngle();
     this.playerSprites.push(nextHeadSprite);
 
-    // Player length does not include the "next head" sprite.
-    let removedSpriteCount = 0;
     while (this.playerSprites.length > this.playerLength) {
       const removedPlayerSprite = this.playerSprites.shift();
       removedPlayerSprite.destroy();
-      removedSpriteCount++;
     }
 
     this.tailSprite.angle = this.playerSprites[1].angle;
-
-    // If the player didn't grow this update, then don't
-    // replay the tail animation. Otherwise it will jump
-    // to its full length.
-    if (removedSpriteCount >= 1) {
-      this.tailSprite.play('tail');
-    }
-    
+    this.tailSprite.play('tail');
     this.headSprite.play('head');
 
     if (this.playerLength > 2) {
@@ -245,12 +235,12 @@ export default class Player {
    * Initializes a new game.
    */
   initializeForNewGame() {
-    this.playerLength = 3;
-    this.playerDirection = PlayerDirection.right;
+    this.playerLength = 2;
+    this.playerDirection = PlayerDirection.up;
 
     this.playerSprites.push(this.scene.add.sprite(
         this.scene.grid.middleCellGameLocation.x,
-        this.scene.grid.middleCellGameLocation.y));  
+        this.scene.grid.middleCellGameLocation.y));
   }
 
   /**
