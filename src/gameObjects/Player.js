@@ -19,13 +19,9 @@ export default class Player {
     this.inputs = inputs;
 
     this.playerDirection = PlayerDirection.up;
-
     this.playerSprites = [];
     this.playerLength = 1;
-    this.keys = undefined;
-    this.cursors = undefined;
     this.timer = 0;
-
     this.died = new Phaser.Events.EventEmitter();
   }
 
