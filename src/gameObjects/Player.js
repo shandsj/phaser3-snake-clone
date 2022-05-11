@@ -19,6 +19,7 @@ export default class Player {
     this.inputs = inputs;
 
     this.playerDirection = PlayerDirection.up;
+    this.requestedDirection = PlayerDirection.up;
     this.playerSprites = [];
     this.playerLength = 1;
     this.timer = 0;
@@ -120,6 +121,7 @@ export default class Player {
    * The callback function used for the movement timer.
    */
   movePlayerTimerCallback() {
+    this.playerDirection = this.requestedDirection;
     const nextHeadSpritePosition = this.calculateNextHeadSpritePosition();
     const nextHeadSprite = this.scene.add.sprite(nextHeadSpritePosition.x, nextHeadSpritePosition.y);
 
@@ -195,28 +197,28 @@ export default class Player {
         return;
       }
 
-      this.playerDirection = PlayerDirection.up;
+      this.requestedDirection = PlayerDirection.up;
     } else if (this.inputs.isLeftMovementInputDown()) {
       // Prevent the player from going in the reverse direction
       if (this.playerDirection == PlayerDirection.right) {
         return;
       }
 
-      this.playerDirection = PlayerDirection.left;
+      this.requestedDirection = PlayerDirection.left;
     } else if (this.inputs.isDownMovementInputDown()) {
       // Prevent the player from going in the reverse direction
       if (this.playerDirection == PlayerDirection.up) {
         return;
       }
 
-      this.playerDirection = PlayerDirection.down;
+      this.requestedDirection = PlayerDirection.down;
     } else if (this.inputs.isRightMovementInputDown()) {
       // Prevent the player from going in the reverse direction
       if (this.playerDirection == PlayerDirection.left) {
         return;
       }
 
-      this.playerDirection = PlayerDirection.right;
+      this.requestedDirection = PlayerDirection.right;
     }
   }
 
