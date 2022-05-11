@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import PlayerDirection from './PlayerDirection';
+import PlayerDirection from '../gameObjects/PlayerDirection';
 
 /**
  * Defines an input class to abstract what inputs are required to move.

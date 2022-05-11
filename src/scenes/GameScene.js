@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
-import Inputs from '../gameObjects/Inputs';
+import Inputs from '../util/Inputs';
 import Player from '../gameObjects/Player';
 import Grid from '../util/Grid';
+import FoodSpawner from '../gameObjects/FoodSpawner';
 
 /**
  * The main game scene.
@@ -38,6 +39,8 @@ export default class GameScene extends Phaser.Scene {
     this.player = new Player(this, this.inputs);
     this.player.died.addListener(null, this.initializeNewGame, this);
     this.player.create();
+
+    this.foodSpawner = new FoodSpawner(this, this.player);
 
     this.anims.create({
       key: 'idle',
@@ -77,7 +80,7 @@ export default class GameScene extends Phaser.Scene {
   eatFood() {
     this.foodSprite.destroy();
     this.player.eatFood();
-    this.spawnFood();
+    this.foodSprite = this.foodSpawner.spawnFood();
   }
 
   /**
@@ -90,23 +93,6 @@ export default class GameScene extends Phaser.Scene {
       this.foodSprite.destroy();
     }
 
-    this.spawnFood();
-  }
-
-  /**
-   * Spawns a food game object.
-   */
-  spawnFood() {
-    const MINIMUM_FOOD_X = 1;
-    const MAXIMUM_FOOD_X = this.grid.gridWidth - 1;
-    const MINIMUM_FOOD_Y = 1;
-    const MAXIMUM_FOOD_Y = this.grid.gridHeight - 1;
-
-    const location = this.grid.getGameLocation(
-        Phaser.Math.Between(MINIMUM_FOOD_X, MAXIMUM_FOOD_X),
-        Phaser.Math.Between(MINIMUM_FOOD_Y, MAXIMUM_FOOD_Y));
-
-    this.foodSprite = this.add.sprite(location.x, location.y);
-    this.foodSprite.play('idle');
+    this.foodSprite = this.foodSpawner.spawnFood();
   }
 }

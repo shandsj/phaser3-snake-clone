@@ -274,4 +274,20 @@ export default class Player {
         return PLAYER_SPRITE_HEIGHT;
     }
   }
+
+  /**
+   * Determines if the player occupies the specified location.
+   * @param {any} location The location to check.
+   * @return {boolean} True if any part of the player occupies the location, false otherwise.
+   */
+  occupiesLocation(location) {
+    for (let i = 0; i < this.playerSprites.length; i++) {
+      const playerSprite = this.playerSprites[i];
+      if (location.x == playerSprite.x && location.y == playerSprite.y) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }
