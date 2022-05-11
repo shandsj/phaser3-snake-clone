@@ -15,7 +15,7 @@ export default class GameScene extends Phaser.Scene {
     super('game-scene');
 
     this.grid = new Grid(this);
-    this.foodSprite = undefined;
+    this.food = undefined;
     this.player = undefined;
     this.inputs = undefined;
   }
@@ -42,21 +42,6 @@ export default class GameScene extends Phaser.Scene {
 
     this.foodSpawner = new FoodSpawner(this, this.player);
 
-    this.anims.create({
-      key: 'idle',
-      frames: [
-        {key: 'food', frame: 0, duration: 500},
-        {key: 'food', frame: 1, duration: 200},
-        {key: 'food', frame: 2, duration: 500},
-        {key: 'food', frame: 3, duration: 100},
-        {key: 'food', frame: 4, duration: 100},
-        {key: 'food', frame: 5, duration: 500},
-        {key: 'food', frame: 6, duration: 250},
-      ],
-      framerate: 8,
-      repeat: -1,
-    });
-
     this.initializeNewGame();
   }
 
@@ -69,7 +54,7 @@ export default class GameScene extends Phaser.Scene {
     this.player.update(time, delta);
 
     // Check if a player has collided with food
-    if (this.player.headSprite.getCenter().equals(this.foodSprite.getCenter())) {
+    if (this.player.headSprite.getCenter().equals(this.food.sprite.getCenter())) {
       this.eatFood();
     }
   }
@@ -78,9 +63,9 @@ export default class GameScene extends Phaser.Scene {
    * Eats a piece of food.
    */
   eatFood() {
-    this.foodSprite.destroy();
+    this.food.destroy();
     this.player.eatFood();
-    this.foodSprite = this.foodSpawner.spawnFood();
+    this.food = this.foodSpawner.spawnFood();
   }
 
   /**
@@ -89,10 +74,10 @@ export default class GameScene extends Phaser.Scene {
   initializeNewGame() {
     this.player.initializeForNewGame();
 
-    if (this.foodSprite != null) {
-      this.foodSprite.destroy();
+    if (this.food != null) {
+      this.food.destroy();
     }
 
-    this.foodSprite = this.foodSpawner.spawnFood();
+    this.food = this.foodSpawner.spawnFood();
   }
 }

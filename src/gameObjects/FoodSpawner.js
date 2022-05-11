@@ -1,3 +1,5 @@
+import Food from './Food';
+
 /**
  * Class that spawns food game objects.
  */
@@ -14,7 +16,7 @@ export default class FoodSpawner {
 
   /**
    * Spawns a food game object.
-   * @return {Sprite} The spawned food sprite.
+   * @return {Food} The spawned food object.
    */
   spawnFood() {
     const MINIMUM_FOOD_X = 1;
@@ -29,8 +31,8 @@ export default class FoodSpawner {
           Phaser.Math.Between(MINIMUM_FOOD_Y, MAXIMUM_FOOD_Y));
     } while (this.player.occupiesLocation(location));
 
-    const foodSprite = this.scene.add.sprite(location.x, location.y);
-    foodSprite.play('idle');
-    return foodSprite;
+    const food = new Food(this.scene, location.x, location.y);
+    food.create();
+    return food;
   }
 }
