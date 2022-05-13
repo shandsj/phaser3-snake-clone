@@ -1,17 +1,28 @@
-# Phaser 3 Webpack Project Template
+# Phaser3 Snake Clone
 
-A Phaser 3 Project Template
+This is the source for my Phaser3 Snake clone, written completely in JavaScript.
 
-### Requirements
+## Prerequisites
+To build and run the project, you'll need to install the following prequisites:
+* [Node.js/npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
-We need [Node.js](https://nodejs.org) to install and run scripts.
+## Building
+To install the required packages, and build, run the following commands:
+```
+npm install
+npm run build
+```
 
-## Install and run
+## Running
+To run the game, run the following command:
+```
+npm start
+```
 
-Run next commands in your terminal:
+## Contributing
 
-| Command | Description |
-|---------|-------------|
-| `npm install` | Install dependencies and launch browser with examples.|
-| `npm start` | Launch browser to show the examples. <br> Press `Ctrl + c` to kill **http-server** process. |
-=======
+Feel free to create issues, or submit a PR. Run the `npm run eslint --fix src` command and fix warnings before submitting PRs.
+
+## License
+
+MIT © Jason Shands
