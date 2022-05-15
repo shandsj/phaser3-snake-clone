@@ -3,6 +3,7 @@ import Inputs from '../util/Inputs';
 import Player from '../gameObjects/Player';
 import Grid from '../util/Grid';
 import FoodSpawner from '../gameObjects/FoodSpawner';
+import Thorns from '../gameObjects/Thorns';
 
 /**
  * The main game scene.
@@ -18,6 +19,7 @@ export default class GameScene extends Phaser.Scene {
     this.food = undefined;
     this.player = undefined;
     this.inputs = undefined;
+    this.thorns = undefined;
   }
 
   /**
@@ -26,6 +28,7 @@ export default class GameScene extends Phaser.Scene {
   preload() {
     this.load.spritesheet('food', 'assets/food.png', {frameWidth: 16, frameHeight: 16});
     this.load.spritesheet('snake', 'assets/snake.png', {frameWidth: 16, frameHeight: 16});
+    this.load.image('thorns', 'assets/thorns.png');
     this.load.image('arrow', 'assets/arrow.png');
   }
 
@@ -35,6 +38,9 @@ export default class GameScene extends Phaser.Scene {
   create() {
     this.inputs = new Inputs(this);
     this.inputs.create();
+
+    this.thorns = new Thorns(this);
+    this.thorns.create();
 
     this.player = new Player(this, this.inputs);
     this.player.died.addListener(null, this.initializeNewGame, this);
