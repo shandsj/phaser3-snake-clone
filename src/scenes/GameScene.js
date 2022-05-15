@@ -3,6 +3,7 @@ import Inputs from '../util/Inputs';
 import Player from '../gameObjects/Player';
 import Grid from '../util/Grid';
 import FoodSpawner from '../gameObjects/FoodSpawner';
+import Thorns from '../gameObjects/Thorns';
 
 /**
  * The main game scene.
@@ -18,6 +19,7 @@ export default class GameScene extends Phaser.Scene {
     this.food = undefined;
     this.player = undefined;
     this.inputs = undefined;
+    this.thorns = undefined;
   }
 
   /**
@@ -37,17 +39,8 @@ export default class GameScene extends Phaser.Scene {
     this.inputs = new Inputs(this);
     this.inputs.create();
 
-    // Add the thorns at the top and bottom of the game screen
-    for (let i = 0; i <= this.game.config.width; i=i+32) {
-      this.add.image(i, 0, 'thorns');
-      this.add.image(i, this.game.config.height, 'thorns');
-    }
-
-    // Add the thorns to the left and right sides of the game screen
-    for (let i = 0; i <= this.game.config.height + 32; i=i+32) {
-      this.add.image(0, i, 'thorns').angle = 90;
-      this.add.image(this.game.config.width, i, 'thorns').angle = 90;
-    }
+    this.thorns = new Thorns(this);
+    this.thorns.create();
 
     this.player = new Player(this, this.inputs);
     this.player.died.addListener(null, this.initializeNewGame, this);
