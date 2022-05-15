@@ -26,6 +26,7 @@ export default class GameScene extends Phaser.Scene {
   preload() {
     this.load.spritesheet('food', 'assets/food.png', {frameWidth: 16, frameHeight: 16});
     this.load.spritesheet('snake', 'assets/snake.png', {frameWidth: 16, frameHeight: 16});
+    this.load.image('thorns', 'assets/thorns.png');
     this.load.image('arrow', 'assets/arrow.png');
   }
 
@@ -35,6 +36,18 @@ export default class GameScene extends Phaser.Scene {
   create() {
     this.inputs = new Inputs(this);
     this.inputs.create();
+
+    // Add the thorns at the top and bottom of the game screen
+    for (let i = 0; i <= this.game.config.width; i=i+32) {
+      this.add.image(i, 0, 'thorns');
+      this.add.image(i, this.game.config.height, 'thorns');
+    }
+
+    // Add the thorns to the left and right sides of the game screen
+    for (let i = 0; i <= this.game.config.height + 32; i=i+32) {
+      this.add.image(0, i, 'thorns').angle = 90;
+      this.add.image(this.game.config.width, i, 'thorns').angle = 90;
+    }
 
     this.player = new Player(this, this.inputs);
     this.player.died.addListener(null, this.initializeNewGame, this);
