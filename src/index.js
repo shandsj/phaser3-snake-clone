@@ -40,10 +40,19 @@ const config = {
   backgroundColor: '#88cc88',
   pixelArt: true,
   antialias: false,
-  autoRound: true,
-  roundPixels: true,
+  autoRound: false,
+  roundPixels: false,
   parent: 'phaser-example',
   scene: [GameScene],
+};
+
+/**
+ * The web font config variable has to exist before the game loads.
+ */
+export const WebFontConfig = {
+  google: {
+    families: ['Press Start 2P'],
+  },
 };
 
 export default new Phaser.Game(config);
