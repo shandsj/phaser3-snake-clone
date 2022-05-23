@@ -92,13 +92,13 @@ export default class Player {
 
     // Check if the player has collided with a wall
     if (this.scene.grid.isOutsideGrid(this.headSprite.getCenter().x, this.headSprite.getCenter().y)) {
-      this.died.emit(null);
+      this.die();
     }
 
     // Check if player has collided with the rest of the player's body
     for (let i = 0; i < this.playerSprites.length - 3; i++) {
       if (this.headSprite.getCenter().equals(this.playerSprites[i].getCenter())) {
-        this.died.emit(null);
+        this.die();
       }
     }
   }
@@ -220,6 +220,14 @@ export default class Player {
 
       this.requestedDirection = PlayerDirection.right;
     }
+  }
+
+  /**
+   * Kills the player.
+   */
+  die() {
+    this.playerLength = 2;
+    this.died.emit(null);
   }
 
   /**
