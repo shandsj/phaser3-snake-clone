@@ -41,8 +41,8 @@ const config = {
   backgroundColor: '#88cc88',
   pixelArt: true,
   antialias: false,
-  autoRound: false,
-  roundPixels: false,
+  autoRound: true,
+  roundPixels: true,
   parent: 'phaser-example',
   scene: [TitleScene, GameScene],
 };
