@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import GameScene from './scenes/GameScene';
+import TitleScene from './scenes/TitleScene';
 
 /**
  * Calculates a resolution based on the device resolution that scales the
@@ -43,7 +44,7 @@ const config = {
   autoRound: false,
   roundPixels: false,
   parent: 'phaser-example',
-  scene: [GameScene],
+  scene: [TitleScene, GameScene],
 };
 
 /**
