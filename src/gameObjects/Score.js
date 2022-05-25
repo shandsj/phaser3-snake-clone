@@ -22,7 +22,7 @@ export default class Score {
       fontSize: '8px',
     });
 
-    this.text.setResolution(56);
+    this.text.setResolution(3);
   }
 
   /**

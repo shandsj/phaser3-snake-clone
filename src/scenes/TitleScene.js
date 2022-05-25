@@ -44,7 +44,7 @@ export default class TitleScene extends Phaser.Scene {
       fontSize: '8px',
     }).setOrigin(0.5).setPadding(100, 100, 100, 100);
 
-    this.text.setResolution(56);
+    this.text.setResolution(3);
   }
 
   /**
