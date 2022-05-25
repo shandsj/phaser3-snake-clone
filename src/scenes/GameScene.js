@@ -49,7 +49,7 @@ export default class GameScene extends Phaser.Scene {
     this.score.create();
 
     this.player = new Player(this, this.inputs);
-    this.player.died.addListener(null, this.initializeNewGame, this);
+    this.player.died.addListener(null, this.onPlayerDied, this);
     this.player.create();
 
     this.foodSpawner = new FoodSpawner(this, this.player);
@@ -94,5 +94,12 @@ export default class GameScene extends Phaser.Scene {
     }
 
     this.food = this.foodSpawner.spawnFood();
+  }
+
+  /**
+   * Callback for when the player dies.
+   */
+  onPlayerDied() {
+    this.scene.start('title-scene');
   }
 }
