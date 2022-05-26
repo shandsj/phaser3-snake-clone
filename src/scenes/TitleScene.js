@@ -10,7 +10,9 @@ export default class TitleScene extends Phaser.Scene {
   constructor() {
     super('title-scene');
 
-    this.text = undefined;
+    this.startText = undefined;
+    this.leaderboardText = undefined;
+    this.selectedOption = undefined;
   }
 
   /**
@@ -29,7 +31,27 @@ export default class TitleScene extends Phaser.Scene {
     this.input.keyboard.on('keydown', function(event) {
       switch (event.keyCode) {
         case Phaser.Input.Keyboard.KeyCodes.ENTER:
-          that.scene.start('game-scene');
+          if (that.selectedOption == that.startText) {
+            that.scene.start('game-scene');
+          }
+          break;
+
+        case Phaser.Input.Keyboard.KeyCodes.W:
+        case Phaser.Input.Keyboard.KeyCodes.UP:
+          if (that.selectedOption == that.startText) {
+            that.selectedOption = that.leaderboardText;
+          } else {
+            that.selectedOption = that.startText;
+          }
+          break;
+
+        case Phaser.Input.Keyboard.KeyCodes.S:
+        case Phaser.Input.Keyboard.KeyCodes.DOWN:
+          if (that.selectedOption == that.startText) {
+            that.selectedOption = that.leaderboardText;
+          } else {
+            that.selectedOption = that.startText;
+          }
           break;
       }
     });
@@ -39,12 +61,23 @@ export default class TitleScene extends Phaser.Scene {
 
     this.add.image(screenCenterX, screenCenterY - 40, 'title').setOrigin(.55);
 
-    this.text = this.add.text(screenCenterX, screenCenterY + 20, 'PRESS ENTER', {
+    this.startText = this.add.text(screenCenterX, screenCenterY + 20, 'START', {
       fontFamily: '"Press Start 2P"',
       fontSize: '8px',
-    }).setOrigin(0.5).setPadding(100, 100, 100, 100);
+    })
+        .setOrigin(0.5)
+        .setPadding(100, 100, 100, 100)
+        .setResolution(10);
 
-    this.text.setResolution(3);
+    this.leaderboardText = this.add.text(screenCenterX, screenCenterY + 40, 'HIGH SCORES', {
+      fontFamily: '"Press Start 2P"',
+      fontSize: '8px',
+    })
+        .setOrigin(0.5)
+        .setPadding(100, 100, 100, 100)
+        .setResolution(10);
+
+    this.selectedOption = this.startText;
   }
 
   /**
@@ -53,6 +86,13 @@ export default class TitleScene extends Phaser.Scene {
    * @param {*} delta The delta time since update was last called.
    */
   update(time, delta) {
+    this.startText.text = 'START';
+    this.leaderboardText.text = 'HIGH SCORES';
 
+    if (this.selectedOption == this.startText) {
+      this.startText.text = '> START';
+    } else {
+      this.leaderboardText.text = '> HIGH SCORES';
+    }
   }
 }
