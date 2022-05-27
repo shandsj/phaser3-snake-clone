@@ -47,8 +47,6 @@ module.exports = {
         new CopyWebpackPlugin({
           patterns: [
               { from: 'assets', to: 'assets' },
-              { from: 'scripts', to: 'scripts' },
-              { from: 'staticwebapp.config.json', to: '' },
           ]
         }),
         new webpack.DefinePlugin({
