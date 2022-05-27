@@ -30,16 +30,19 @@ export default class HighScoresScene extends Phaser.Scene {
         this.add.text(30, 10, "RANK", {
           fontFamily: '"Press Start 2P"',
           fontSize: '8px',
+          color: '#ffff00',
         }).setResolution(10);
 
         this.add.text(90, 10, "SCORE", {
           fontFamily: '"Press Start 2P"',
           fontSize: '8px',
+          color: '#ffff00',
         }).setResolution(10);
 
         this.add.text(160, 10, "NAME", {
           fontFamily: '"Press Start 2P"',
           fontSize: '8px',
+          color: '#ffff00',
         }).setResolution(10);
 
         for (let i = 0; i < response.data.scores.length; i++) {
