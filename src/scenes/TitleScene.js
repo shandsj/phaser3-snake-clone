@@ -17,7 +17,7 @@ export default class TitleScene extends Phaser.Scene {
    * Preloads the scene.
    */
   preload() {
-    // this.load.script('webfont', 'scripts/webfont.js');
+    this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
     this.load.image('title', 'assets/TitleScreen.png');
   }
 
