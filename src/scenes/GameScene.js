@@ -32,7 +32,7 @@ export default class GameScene extends Phaser.Scene {
     this.load.spritesheet('snake', 'assets/snake.png', {frameWidth: 16, frameHeight: 16});
     this.load.image('thorns', 'assets/thorns.png');
     this.load.image('arrow', 'assets/arrow.png');
-    this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+    // this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
   }
 
   /**
