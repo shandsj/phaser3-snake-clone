@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import GameScene from './scenes/GameScene';
+import HighScoresScene from './scenes/HighScoresScene';
 import TitleScene from './scenes/TitleScene';
 
 /**
@@ -44,7 +45,7 @@ const config = {
   autoRound: true,
   roundPixels: true,
   parent: 'phaser-example',
-  scene: [TitleScene, GameScene],
+  scene: [TitleScene, GameScene, HighScoresScene],
 };
 
 /**

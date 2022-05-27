@@ -33,6 +33,8 @@ export default class TitleScene extends Phaser.Scene {
         case Phaser.Input.Keyboard.KeyCodes.ENTER:
           if (that.selectedOption == that.startText) {
             that.scene.start('game-scene');
+          } else {
+            that.scene.start('high-scores-scene');
           }
           break;
 
