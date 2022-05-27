@@ -48,7 +48,7 @@ module.exports = {
           patterns: [
               { from: 'assets', to: 'assets' },
               { from: 'scripts', to: 'scripts' },
-              { from: 'web.config', to: '' },
+              { from: 'staticwebapp.config.json', to: '' },
           ]
         }),
         new webpack.DefinePlugin({
