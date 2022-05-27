@@ -46,7 +46,8 @@ module.exports = {
         }),
         new CopyWebpackPlugin({
           patterns: [
-              { from: 'assets', to: 'assets' }
+              { from: 'assets', to: 'assets' },
+              { from: 'scripts', to: 'scripts' },
           ]
         }),
         new webpack.DefinePlugin({
