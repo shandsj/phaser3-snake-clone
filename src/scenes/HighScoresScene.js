@@ -24,43 +24,70 @@ export default class HighScoresScene extends Phaser.Scene {
    * Creates the scene.
    */
   create() {
+    const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
+    const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
+
+    this.loadingText = this.add.text(screenCenterX, screenCenterY, 'LOADING...', {
+      fontFamily: '"Press Start 2P"',
+      fontSize: '8px',
+    })
+        .setOrigin(.5)
+        .setResolution(10);
+
     axios.get('https://shandsj-scoreboardly.azurewebsites.net/api/scoreboards/b8f4e5bb-e5e3-43ad-b35a-456ecaeb80f5')
         .then((response) => {
-          this.add.text(30, 10, 'RANK', {
-            fontFamily: '"Press Start 2P"',
-            fontSize: '8px',
-            color: '#ffff00',
-          }).setResolution(10);
+          this.loadingText.destroy();
 
-          this.add.text(90, 10, 'SCORE', {
+          this.add.text(screenCenterX - 70, 10, 'RANK', {
             fontFamily: '"Press Start 2P"',
             fontSize: '8px',
             color: '#ffff00',
-          }).setResolution(10);
+          })
+              .setOrigin(.5)
+              .setResolution(10);
 
-          this.add.text(160, 10, 'NAME', {
+          this.add.text(screenCenterX - 5, 10, 'SCORE', {
             fontFamily: '"Press Start 2P"',
             fontSize: '8px',
             color: '#ffff00',
-          }).setResolution(10);
+          })
+              .setOrigin(.5)
+              .setResolution(10);
+
+          this.add.text(screenCenterX + 70, 10, 'NAME', {
+            fontFamily: '"Press Start 2P"',
+            fontSize: '8px',
+            color: '#ffff00',
+          })
+              .setOrigin(.5)
+              .setResolution(10);
 
           for (let i = 0; i < response.data.scores.length; i++) {
             const entry = response.data.scores[i];
-            this.add.text(30, 30 + (i * 20), i + 1, {
+            this.add.text(screenCenterX - 70, 30 + (i * 20), i + 1, {
               fontFamily: '"Press Start 2P"',
               fontSize: '8px',
-            }).setResolution(10);
+            })
+                .setOrigin(.5)
+                .setResolution(10);
 
-            this.add.text(90, 30 + (i * 20), entry.score, {
+            this.add.text(screenCenterX - 5, 30 + (i * 20), entry.score, {
               fontFamily: '"Press Start 2P"',
               fontSize: '8px',
-            }).setResolution(10);
+            })
+                .setOrigin(.5)
+                .setResolution(10);
 
-            this.add.text(160, 30 + (i * 20), entry.playerName.toUpperCase(), {
+            this.add.text(screenCenterX + 70, 30 + (i * 20), entry.playerName.toUpperCase(), {
               fontFamily: '"Press Start 2P"',
               fontSize: '8px',
-            }).setResolution(10);
+            })
+                .setOrigin(.5)
+                .setResolution(10);
           }
+
+
+          this.time.delayedCall(10000, this.onTimer, null, this);
         });
   }
 
@@ -70,5 +97,12 @@ export default class HighScoresScene extends Phaser.Scene {
    * @param {*} delta The delta time since update was last called.
    */
   update(time, delta) {
+  }
+
+  /**
+   * The timer callback that changes scenes.
+   */
+  onTimer() {
+    this.scene.start('title-scene');
   }
 }
