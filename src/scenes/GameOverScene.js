@@ -36,21 +36,41 @@ export default class GameOverScene extends Phaser.Scene {
     const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
     const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
 
-    this.add.text(screenCenterX, screenCenterY - 10, 'GAME OVER', {
+    this.add.text(screenCenterX, screenCenterY - 40, 'GAME OVER', {
       fontFamily: '"Press Start 2P"',
       fontSize: '8px',
     })
         .setOrigin(.5)
         .setResolution(10);
 
-    this.add.text(screenCenterX, screenCenterY + 10, 'SCORE: ' + this.score, {
+    this.add.text(screenCenterX, screenCenterY - 20, 'SCORE: ' + this.score, {
       fontFamily: '"Press Start 2P"',
       fontSize: '8px',
     })
         .setOrigin(.5)
         .setResolution(10);
 
-    this.time.delayedCall(10000, this.onTimer, null, this);
+    this.add.text(screenCenterX, screenCenterY + 20, 'ENTER YOUR NAME:', {
+      fontFamily: '"Press Start 2P"',
+      fontSize: '8px',
+    })
+        .setOrigin(.5)
+        .setResolution(10);
+
+    this.textBox = this.add.text(screenCenterX, screenCenterY + 40, '', {
+      fontFamily: '"Press Start 2P"',
+      fontSize: '8px',
+      color: '#000000',
+      fixedWidth: 150,
+      fixedHeight: 10,
+      backgroundColor: '#ffffff',
+    })
+        .setOrigin(.5)
+        .setResolution(10);
+
+    this.rexUI.edit(this.textBox);
+
+    // this.time.delayedCall(10000, this.onTimer, null, this);
   }
 
   /**
