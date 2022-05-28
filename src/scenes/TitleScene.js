@@ -21,7 +21,6 @@ export default class TitleScene extends Phaser.Scene {
    */
   preload() {
     this.load.image('title', 'assets/TitleScreen.png');
-    // this.load.css('webfont', 'https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
     this.load.addFile(new WebFontFile(this.load, 'Press Start 2P'));
   }
 
