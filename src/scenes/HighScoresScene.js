@@ -11,7 +11,6 @@ export default class HighScoresScene extends Phaser.Scene {
    */
   constructor() {
     super('high-scores-scene');
-
   }
 
   /**
@@ -25,45 +24,44 @@ export default class HighScoresScene extends Phaser.Scene {
    * Creates the scene.
    */
   create() {
-    axios.get("https://shandsj-scoreboardly.azurewebsites.net/api/scoreboards/b8f4e5bb-e5e3-43ad-b35a-456ecaeb80f5")
-      .then(response => {
-
-        this.add.text(30, 10, "RANK", {
-          fontFamily: '"Press Start 2P"',
-          fontSize: '8px',
-          color: '#ffff00',
-        }).setResolution(10);
-
-        this.add.text(90, 10, "SCORE", {
-          fontFamily: '"Press Start 2P"',
-          fontSize: '8px',
-          color: '#ffff00',
-        }).setResolution(10);
-
-        this.add.text(160, 10, "NAME", {
-          fontFamily: '"Press Start 2P"',
-          fontSize: '8px',
-          color: '#ffff00',
-        }).setResolution(10);
-
-        for (let i = 0; i < response.data.scores.length; i++) {
-          let entry = response.data.scores[i];
-          this.add.text(30, 30 + (i * 20), i + 1, {
+    axios.get('https://shandsj-scoreboardly.azurewebsites.net/api/scoreboards/b8f4e5bb-e5e3-43ad-b35a-456ecaeb80f5')
+        .then((response) => {
+          this.add.text(30, 10, 'RANK', {
             fontFamily: '"Press Start 2P"',
             fontSize: '8px',
+            color: '#ffff00',
           }).setResolution(10);
 
-          this.add.text(90, 30 + (i * 20), entry.score, {
+          this.add.text(90, 10, 'SCORE', {
             fontFamily: '"Press Start 2P"',
             fontSize: '8px',
+            color: '#ffff00',
           }).setResolution(10);
 
-          this.add.text(160, 30 + (i * 20), entry.playerName.toUpperCase(), {
+          this.add.text(160, 10, 'NAME', {
             fontFamily: '"Press Start 2P"',
             fontSize: '8px',
+            color: '#ffff00',
           }).setResolution(10);
-        }
-      });
+
+          for (let i = 0; i < response.data.scores.length; i++) {
+            const entry = response.data.scores[i];
+            this.add.text(30, 30 + (i * 20), i + 1, {
+              fontFamily: '"Press Start 2P"',
+              fontSize: '8px',
+            }).setResolution(10);
+
+            this.add.text(90, 30 + (i * 20), entry.score, {
+              fontFamily: '"Press Start 2P"',
+              fontSize: '8px',
+            }).setResolution(10);
+
+            this.add.text(160, 30 + (i * 20), entry.playerName.toUpperCase(), {
+              fontFamily: '"Press Start 2P"',
+              fontSize: '8px',
+            }).setResolution(10);
+          }
+        });
   }
 
   /**

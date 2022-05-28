@@ -101,6 +101,6 @@ export default class GameScene extends Phaser.Scene {
    * Callback for when the player dies.
    */
   onPlayerDied() {
-    this.scene.start('title-scene');
+    this.scene.start('game-over-scene', this.score.score);
   }
 }
