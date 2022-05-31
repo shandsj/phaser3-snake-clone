@@ -1,5 +1,8 @@
 import Phaser from 'phaser';
+import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin';
+import GameOverScene from './scenes/GameOverScene';
 import GameScene from './scenes/GameScene';
+import HighScoresScene from './scenes/HighScoresScene';
 import TitleScene from './scenes/TitleScene';
 
 /**
@@ -44,7 +47,17 @@ const config = {
   autoRound: true,
   roundPixels: true,
   parent: 'phaser-example',
-  scene: [TitleScene, GameScene],
+  dom: {
+    createContainer: true,
+  },
+  plugins: {
+    scene: [{
+      key: 'rexUI',
+      plugin: UIPlugin,
+      mapping: 'rexUI',
+    }],
+  },
+  scene: [TitleScene, GameScene, GameOverScene, HighScoresScene],
 };
 
 /**

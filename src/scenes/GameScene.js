@@ -5,6 +5,7 @@ import Grid from '../util/Grid';
 import FoodSpawner from '../gameObjects/FoodSpawner';
 import Thorns from '../gameObjects/Thorns';
 import Score from '../gameObjects/Score';
+import WebFontFile from '../util/WebFontFile';
 
 /**
  * The main game scene.
@@ -32,6 +33,7 @@ export default class GameScene extends Phaser.Scene {
     this.load.spritesheet('snake', 'assets/snake.png', {frameWidth: 16, frameHeight: 16});
     this.load.image('thorns', 'assets/thorns.png');
     this.load.image('arrow', 'assets/arrow.png');
+    this.load.addFile(new WebFontFile(this.load, 'Press Start 2P'));
   }
 
   /**
@@ -99,6 +101,6 @@ export default class GameScene extends Phaser.Scene {
    * Callback for when the player dies.
    */
   onPlayerDied() {
-    this.scene.start('title-scene');
+    this.scene.start('game-over-scene', this.score.score);
   }
 }
