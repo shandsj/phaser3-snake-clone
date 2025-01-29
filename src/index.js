@@ -46,9 +46,9 @@ const config = {
   antialias: false,
   autoRound: true,
   roundPixels: true,
-  parent: 'phaser-example',
+  parent: 'game-container',
   dom: {
-    createContainer: true,
+    createContainer: false,
   },
   plugins: {
     scene: [{
